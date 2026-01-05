@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { CheckSquare, ChevronRight, LogOut } from 'lucide-react';
 import ThemeToggle from './theme-toggle';
 import { Button } from './ui/button';
@@ -10,13 +10,15 @@ import { useAuth, useUser } from '@/firebase';
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const isDashboard = pathname === '/dashboard';
   const { user } = useUser();
   const auth = useAuth();
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     if (auth) {
-      auth.signOut();
+      await auth.signOut();
+      router.push('/auth/sign-in');
     }
   };
 
@@ -36,8 +38,8 @@ export default function Header() {
           )}
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          {!isDashboard && !user && (
-            <Link href="/dashboard">
+          {!user && (
+            <Link href="/auth/sign-up">
               <Button>
                 Get Started
               </Button>

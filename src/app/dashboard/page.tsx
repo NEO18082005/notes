@@ -15,24 +15,21 @@ import {
   useFirestore,
   useCollection,
   useMemoFirebase,
-  initiateAnonymousSignIn,
   addDocumentNonBlocking,
   updateDocumentNonBlocking,
   deleteDocumentNonBlocking,
 } from '@/firebase';
-import { useAuth } from '@/firebase/provider';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
-  const auth = useAuth();
   const firestore = useFirestore();
   const router = useRouter();
 
   useEffect(() => {
     if (!isUserLoading && !user) {
-      initiateAnonymousSignIn(auth);
+      router.push('/auth/sign-in');
     }
-  }, [isUserLoading, user, auth, router]);
+  }, [isUserLoading, user, router]);
 
   const tasksCollectionRef = useMemoFirebase(
     () => (user ? collection(firestore, 'users', user.uid, 'tasks') : null),
