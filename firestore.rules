@@ -1,0 +1,94 @@
+/**
+ * This ruleset enforces a strict user-ownership model for a Task Management application.
+ *
+ * Core Philosophy:
+ * The security model is built on the principle that users have complete and exclusive control
+ * over their own data. All user-generated content, such as tasks, is stored in a private
+ * data tree, making it impossible for one user to access another user's information.
+ *
+ * Data Structure:
+ * All data is nested under the `/users/{userId}` path. This path-based ownership is the
+ * primary mechanism for authorization, ensuring that rules are simple, performant, and secure.
+ *   - /users/{userId}: A root document for user-specific data (not detailed in the schema).
+ *   - /users/{userId}/tasks/{taskId}: A collection of tasks owned by the user.
+ *
+ * Key Security Decisions:
+ * - Strict Data Isolation: A user can only ever access documents under their own `/users/{userId}` path.
+ * - No Public Data: There are no top-level public collections. All data is private.
+ * - User Listing Disabled: To protect user privacy, it is not possible to list documents from the top-level `/users` collection.
+ * - Deny by Default: All operations are denied unless explicitly allowed by a rule.
+ * - Relational Integrity: On creation, the task document's `id` field must match the document ID in the path (`taskId`) to ensure data consistency. This `id` is immutable.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for improved readability and reusability.
+
+    /**
+     * Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the currently authenticated user's UID matches the provided userId.
+     * This is the primary function for verifying data ownership.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Checks for ownership on an existing document. Used for safe updates and deletes.
+     * Denies requests that target non-existent documents, preventing unintended side effects.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description
+     *   Rules for the user's root document. This allows a user to create and manage their
+     *   own profile document, but prevents others from reading or modifying it. Listing
+     *   users is explicitly forbidden to protect user privacy.
+     * @path
+     *   /users/{userId}
+     * @allow
+     *   A new user with UID 'user_abc' can create their own user document at `/users/user_abc`. (create)
+     * @deny
+     *   An authenticated user 'user_xyz' cannot read the document at `/users/user_abc`. (get)
+     * @principle
+     *   Restricts access to a user's own data tree and prevents user enumeration.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if false;
+    }
+
+    /**
+     * @description
+     *   Governs access to a user's private tasks. Only the owner of the tasks, identified
+     *   by the {userId} in the path, can read, create, update, or delete them.
+     * @path
+     *   /users/{userId}/tasks/{taskId}
+     * @allow
+     *   User 'user_abc' can create a new task document in their own subcollection at `/users/user_abc/tasks/task_123`. (create)
+     * @deny
+     *   User 'user_xyz' cannot read a task at `/users/user_abc/tasks/task_123`. (get)
+     * @principle
+     *   Enforces strict document ownership based on the collection path.
+     */
+    match /users/{userId}/tasks/{taskId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.id == taskId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+  }
+}
