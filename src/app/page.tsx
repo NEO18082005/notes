@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Zap, LayoutGrid } from 'lucide-react';
+import { CheckCircle, Zap, LayoutGrid, Rows3 } from 'lucide-react';
 import Link from 'next/link';
 import Header from '@/components/header';
 
@@ -33,27 +33,34 @@ export default function LandingPage() {
                         Task Master provides a simple yet powerful way to manage your tasks and stay productive.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    <div className="bg-card p-8 rounded-lg text-center border">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                    <div className="bg-card p-8 rounded-lg text-center border transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
                         <div className="inline-block bg-primary/10 text-primary p-3 rounded-full mb-4">
                             <Zap className="h-7 w-7" />
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Simple & Fast</h3>
                         <p className="text-muted-foreground">A clean, intuitive interface that lets you add and manage tasks in seconds. No clutter, just focus.</p>
                     </div>
-                    <div className="bg-card p-8 rounded-lg text-center border">
+                    <div className="bg-card p-8 rounded-lg text-center border transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
                         <div className="inline-block bg-primary/10 text-primary p-3 rounded-full mb-4">
                             <LayoutGrid className="h-7 w-7" />
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Organize Your Way</h3>
                         <p className="text-muted-foreground">Separate your tasks into "To-do" and "Completed" lists to easily track your progress and stay organized.</p>
                     </div>
-                    <div className="bg-card p-8 rounded-lg text-center border">
+                    <div className="bg-card p-8 rounded-lg text-center border transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
                         <div className="inline-block bg-primary/10 text-primary p-3 rounded-full mb-4">
                             <CheckCircle className="h-7 w-7" />
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Track Completion</h3>
                         <p className="text-muted-foreground">Mark tasks as complete with a single click and move them to your completed list, giving you a sense of accomplishment.</p>
+                    </div>
+                    <div className="bg-card p-8 rounded-lg text-center border transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+                        <div className="inline-block bg-primary/10 text-primary p-3 rounded-full mb-4">
+                            <Rows3 className="h-7 w-7" />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2">Toggle Details</h3>
+                        <p className="text-muted-foreground">Easily expand or collapse task descriptions to keep your view clean and focused on what matters most.</p>
                     </div>
                 </div>
             </div>
