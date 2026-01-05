@@ -20,15 +20,10 @@ export default function LandingPage() {
             A simple, yet powerful tool to manage your daily tasks, boost your
             productivity, and bring clarity to your day.
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center">
             <Link href="/dashboard" passHref>
               <Button size="lg">
-                Start your free trial
-              </Button>
-            </Link>
-            <Link href="/dashboard" passHref>
-              <Button size="lg" variant="outline">
-                Get Demo
+                Get Started
               </Button>
             </Link>
           </div>
@@ -50,7 +45,7 @@ export default function LandingPage() {
         <section className="bg-transparent py-20 md:py-24">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold font-headline text-center mb-12">
-              All-in-One Task Management
+              Features of Task Master
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md transition-transform hover:-translate-y-2">
