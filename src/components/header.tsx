@@ -15,9 +15,11 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-           <Button variant="ghost" asChild>
-                <Link href="/dashboard">Dashboard</Link>
-            </Button>
+           <Link href="/dashboard">
+              <Button>
+                Get Started
+              </Button>
+            </Link>
           <ThemeToggle />
         </div>
       </div>
