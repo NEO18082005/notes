@@ -32,7 +32,7 @@ export default function TaskItem({ task, onToggleComplete, onDelete, onUpdate }:
   return (
     <div
       className={cn(
-        "flex items-center p-4 transition-all duration-300 ease-in-out",
+        "flex items-center p-4 transition-all duration-200 ease-in-out transform hover:scale-[1.02] hover:shadow-md",
         task.completed ? "bg-muted/50" : "bg-card",
         "group"
       )}
