@@ -32,9 +32,8 @@ export default function TaskItem({ task, onToggleComplete, onDelete, onUpdate }:
   return (
     <div
       className={cn(
-        "flex items-center p-4 transition-all duration-200 ease-in-out transform hover:scale-[1.02] hover:shadow-md",
-        task.completed ? "bg-muted/50" : "bg-card",
-        "group"
+        "flex items-center p-4 transition-all duration-200 ease-in-out transform hover:scale-[1.02] hover:shadow-lg group",
+        task.completed ? "bg-muted/50 hover:bg-muted" : "bg-card hover:bg-card/90"
       )}
     >
       <Checkbox
