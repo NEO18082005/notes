@@ -27,18 +27,6 @@ export default function LandingPage() {
               </Button>
             </Link>
           </div>
-          <div className="mt-16 px-8">
-            <div className="relative mx-auto w-full max-w-5xl rounded-xl shadow-2xl bg-card/50 p-2 ring-1 ring-inset ring-border/50">
-                <Image 
-                    src="https://picsum.photos/seed/1/1200/800"
-                    alt="Task Master application screenshot"
-                    width={1200}
-                    height={800}
-                    className="rounded-lg"
-                    data-ai-hint="app screenshot"
-                />
-            </div>
-          </div>
         </section>
 
         {/* Features Section */}
