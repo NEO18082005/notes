@@ -68,7 +68,7 @@ export default function DashboardPage() {
   if (!isMounted) {
     // Render a skeleton or null to avoid hydration mismatch and layout shift
     return (
-        <main className="flex-grow p-4 md:p-8">
+        <main className="container mx-auto px-4 flex-grow py-8 md:py-12">
             <div className="flex justify-between items-center mb-6">
                 <div className="h-9 w-36 bg-muted-foreground/20 rounded-md animate-pulse"></div>
                 <div className="h-10 w-28 bg-muted-foreground/20 rounded-md animate-pulse"></div>
@@ -83,7 +83,7 @@ export default function DashboardPage() {
   }
 
   return (
-      <main className="flex-grow p-4 md:p-8">
+      <main className="container mx-auto px-4 flex-grow py-8 md:py-12">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold font-headline">My Tasks</h1>
           <TaskDialog onSave={addTask}>
