@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CheckSquare } from 'lucide-react';
+import { CheckSquare, ChevronRight } from 'lucide-react';
 import ThemeToggle from './theme-toggle';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
@@ -20,6 +20,12 @@ export default function Header() {
             <CheckSquare className="h-6 w-6 mr-2 text-primary" />
             <span className="font-bold font-headline text-lg">Task Master</span>
           </Link>
+          {isDashboard && (
+            <div className="flex items-center">
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              <span className="font-semibold text-lg text-foreground">Dashboard</span>
+            </div>
+          )}
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           {!isDashboard && (
