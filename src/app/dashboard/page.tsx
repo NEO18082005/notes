@@ -6,7 +6,6 @@ import { Plus } from 'lucide-react';
 import type { Task } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import Header from '@/components/header';
 import TaskList from '@/components/task-list';
 import { TaskDialog } from '@/components/task-form';
 import { Separator } from '@/components/ui/separator';
@@ -69,9 +68,7 @@ export default function DashboardPage() {
   if (!isMounted) {
     // Render a skeleton or null to avoid hydration mismatch and layout shift
     return (
-        <div className="flex flex-col min-h-screen bg-background text-foreground">
-          <div className="sticky top-0 z-50 w-full border-b bg-background/95 h-14"></div>
-          <main className="flex-grow container mx-auto p-4 md:p-8">
+        <main className="flex-grow p-4 md:p-8">
             <div className="flex justify-between items-center mb-6">
                 <div className="h-9 w-36 bg-muted-foreground/20 rounded-md animate-pulse"></div>
                 <div className="h-10 w-28 bg-muted-foreground/20 rounded-md animate-pulse"></div>
@@ -81,15 +78,12 @@ export default function DashboardPage() {
                     <div className="h-48 bg-muted/10 rounded-lg animate-pulse"></div>
                 </div>
             </div>
-          </main>
-        </div>
+        </main>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <Header />
-      <main className="flex-grow container mx-auto p-4 md:p-8">
+      <main className="flex-grow p-4 md:p-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold font-headline">My Tasks</h1>
           <TaskDialog onSave={addTask}>
@@ -102,7 +96,7 @@ export default function DashboardPage() {
         <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-semibold font-headline mb-4">To-do</h2>
-              <Card className="shadow-md">
+              <Card>
                 <CardContent className="p-0">
                   {todoTasks.length > 0 ? (
                     <TaskList
@@ -125,7 +119,7 @@ export default function DashboardPage() {
               <div>
                 <Separator className="my-8" />
                 <h2 className="text-2xl font-semibold font-headline mb-4">Completed</h2>
-                <Card className="shadow-md">
+                <Card>
                   <CardContent className="p-0">
                     <TaskList
                       tasks={completedTasks}
@@ -140,9 +134,5 @@ export default function DashboardPage() {
         </div>
 
       </main>
-      <footer className="text-center p-4 text-muted-foreground text-sm">
-        <p>Welcome to Task Master. Your focus, simplified.</p>
-      </footer>
-    </div>
   );
 }

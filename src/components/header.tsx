@@ -14,14 +14,8 @@ export default function Header() {
             <span className="font-bold font-headline text-lg">Task Master</span>
           </Link>
         </div>
-        <nav className="flex-1 items-center space-x-4 hidden md:flex">
-            <Link href="/dashboard" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">Dashboard</Link>
-        </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggle />
-          <Button asChild>
-            <Link href="/dashboard">Get Started</Link>
-          </Button>
         </div>
       </div>
     </header>
