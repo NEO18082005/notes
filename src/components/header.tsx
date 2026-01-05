@@ -1,10 +1,17 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { CheckSquare } from 'lucide-react';
 import ThemeToggle from './theme-toggle';
 import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
+  const pathname = usePathname();
+  const isDashboard = pathname === '/dashboard';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -15,11 +22,13 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-           <Link href="/dashboard">
+          {!isDashboard && (
+            <Link href="/dashboard">
               <Button>
                 Get Started
               </Button>
             </Link>
+          )}
           <ThemeToggle />
         </div>
       </div>
