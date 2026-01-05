@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/header';
 import TaskList from '@/components/task-list';
 import { TaskDialog } from '@/components/task-form';
+import { Separator } from '@/components/ui/separator';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -61,6 +62,9 @@ export default function Home() {
   const deleteTask = (id: string) => {
     setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
   };
+
+  const todoTasks = tasks.filter(task => !task.completed);
+  const completedTasks = tasks.filter(task => task.completed);
   
   if (!isMounted) {
     // Render a skeleton or null to avoid hydration mismatch and layout shift
@@ -94,23 +98,47 @@ export default function Home() {
             </Button>
           </TaskDialog>
         </div>
-        <Card className="shadow-md">
-          <CardContent className="p-0">
-            {tasks.length > 0 ? (
-              <TaskList
-                tasks={tasks}
-                onToggleComplete={toggleTaskCompletion}
-                onDelete={deleteTask}
-                onUpdate={updateTask}
-              />
-            ) : (
-              <div className="text-center p-16 text-muted-foreground">
-                <p className="text-lg font-medium">You have no tasks!</p>
-                <p className="mt-2">Click "Add Task" to get started.</p>
+        
+        <div className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-semibold font-headline mb-4">To-do</h2>
+              <Card className="shadow-md">
+                <CardContent className="p-0">
+                  {todoTasks.length > 0 ? (
+                    <TaskList
+                      tasks={todoTasks}
+                      onToggleComplete={toggleTaskCompletion}
+                      onDelete={deleteTask}
+                      onUpdate={updateTask}
+                    />
+                  ) : (
+                    <div className="text-center p-16 text-muted-foreground">
+                      <p className="text-lg font-medium">No tasks to do!</p>
+                      <p className="mt-2">Click "Add Task" to get started.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {completedTasks.length > 0 && (
+              <div>
+                <Separator className="my-8" />
+                <h2 className="text-2xl font-semibold font-headline mb-4">Completed</h2>
+                <Card className="shadow-md">
+                  <CardContent className="p-0">
+                    <TaskList
+                      tasks={completedTasks}
+                      onToggleComplete={toggleTaskCompletion}
+                      onDelete={deleteTask}
+                      onUpdate={updateTask}
+                    />
+                  </CardContent>
+                </Card>
               </div>
             )}
-          </CardContent>
-        </Card>
+        </div>
+
       </main>
       <footer className="text-center p-4 text-muted-foreground text-sm">
         <p>Welcome to Task Master. Your focus, simplified.</p>
