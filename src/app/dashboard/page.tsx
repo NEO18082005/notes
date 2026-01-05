@@ -2,34 +2,30 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import type { Task } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import TaskList from '@/components/task-list';
 import { TaskDialog } from '@/components/task-form';
+import { useUser } from '@/firebase';
+import { initiateAnonymousSignIn } from '@/firebase/non-blocking-login';
+import { useAuth } from '@/firebase/provider';
+
 
 export default function DashboardPage() {
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
-
+  
   useEffect(() => {
-    setIsMounted(true);
-    try {
-      const storedTasks = localStorage.getItem('tasks');
-      if (storedTasks) {
-        setTasks(JSON.parse(storedTasks));
-      }
-    } catch (error) {
-      console.error("Failed to parse tasks from localStorage", error);
+    if (!isUserLoading && !user) {
+      initiateAnonymousSignIn(auth);
     }
-  }, []);
+  }, [isUserLoading, user, auth, router]);
 
-  useEffect(() => {
-    if (isMounted) {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-  }, [tasks, isMounted]);
 
   const addTask = (title: string, description: string) => {
     const newTask: Task = {
@@ -64,7 +60,7 @@ export default function DashboardPage() {
   const todoTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
   
-  if (!isMounted) {
+  if (isUserLoading || !user) {
     // Render a skeleton or null to avoid hydration mismatch and layout shift
     return (
         <main className="container mx-auto px-4 flex-grow py-8 md:py-12">

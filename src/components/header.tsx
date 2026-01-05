@@ -3,14 +3,22 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CheckSquare, ChevronRight } from 'lucide-react';
+import { CheckSquare, ChevronRight, LogOut } from 'lucide-react';
 import ThemeToggle from './theme-toggle';
 import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
+import { useAuth, useUser } from '@/firebase';
 
 export default function Header() {
   const pathname = usePathname();
   const isDashboard = pathname === '/dashboard';
+  const { user } = useUser();
+  const auth = useAuth();
+
+  const handleSignOut = () => {
+    if (auth) {
+      auth.signOut();
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -21,19 +29,25 @@ export default function Header() {
             <span className="font-bold font-headline text-lg">Task Master</span>
           </Link>
           {isDashboard && (
-            <div className="flex items-center">
+            <div className="flex items-center ml-2">
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              <span className="font-semibold text-lg text-foreground">Dashboard</span>
+              <span className="font-semibold text-lg text-foreground ml-1">Dashboard</span>
             </div>
           )}
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          {!isDashboard && (
+          {!isDashboard && !user && (
             <Link href="/dashboard">
               <Button>
                 Get Started
               </Button>
             </Link>
+          )}
+          {user && (
+             <Button variant="ghost" onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+            </Button>
           )}
           <ThemeToggle />
         </div>
