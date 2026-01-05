@@ -1,55 +1,71 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Moon, Sun } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import * as React from "react"
+import { Moon, Sun, Laptop } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState('light');
-  const [isMounted, setIsMounted] = useState(false);
+  const [theme, setThemeState] = React.useState<"theme-light" | "dark" | "system">("system");
+  const [isMounted, setIsMounted] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsMounted(true);
-    const storedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const initialTheme = storedTheme || systemTheme;
-    setTheme(initialTheme);
+    const storedTheme = localStorage.getItem("theme") as "theme-light" | "dark" | "system" | null;
+    if (storedTheme) {
+      setThemeState(storedTheme);
+    }
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isMounted) {
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
+      const isDark =
+        theme === "dark" ||
+        (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      document.documentElement.classList[isDark ? 'add' : 'remove']("dark")
     }
   }, [theme, isMounted]);
 
-  const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
-
+  const setTheme = (newTheme: "theme-light" | "dark" | "system") => {
+    if(isMounted) {
+      localStorage.setItem("theme", newTheme);
+      setThemeState(newTheme);
+    }
+  }
+  
   if (!isMounted) {
-    return <div className="h-8 w-8" />; // Placeholder to prevent layout shift
+    return <div className="h-9 w-9" />; // Placeholder to prevent layout shift
   }
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="right" align="center">
-          Toggle Theme
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("theme-light")}>
+          <Sun className="mr-2 h-4 w-4" />
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          <Moon className="mr-2 h-4 w-4" />
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          <Laptop className="mr-2 h-4 w-4" />
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }

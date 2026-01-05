@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import TaskList from '@/components/task-list';
 import { TaskDialog } from '@/components/task-form';
-import { Separator } from '@/components/ui/separator';
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -73,10 +72,17 @@ export default function DashboardPage() {
                 <div className="h-9 w-36 bg-muted-foreground/20 rounded-md animate-pulse"></div>
                 <div className="h-10 w-28 bg-muted-foreground/20 rounded-md animate-pulse"></div>
             </div>
-            <div className="border rounded-lg">
-                <div className="p-0">
-                    <div className="h-48 bg-muted/10 rounded-lg animate-pulse"></div>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="border rounded-lg">
+                  <div className="p-0">
+                      <div className="h-48 bg-muted/10 rounded-lg animate-pulse"></div>
+                  </div>
+              </div>
+              <div className="border rounded-lg">
+                  <div className="p-0">
+                      <div className="h-48 bg-muted/10 rounded-lg animate-pulse"></div>
+                  </div>
+              </div>
             </div>
         </main>
     );
@@ -93,7 +99,7 @@ export default function DashboardPage() {
           </TaskDialog>
         </div>
         
-        <div className="space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-2xl font-semibold font-headline mb-4">To-do</h2>
               <Card>
@@ -115,22 +121,25 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {completedTasks.length > 0 && (
-              <div>
-                <Separator className="my-8" />
-                <h2 className="text-2xl font-semibold font-headline mb-4">Completed</h2>
-                <Card>
-                  <CardContent className="p-0">
+            <div>
+              <h2 className="text-2xl font-semibold font-headline mb-4">Completed</h2>
+              <Card>
+                <CardContent className="p-0">
+                  {completedTasks.length > 0 ? (
                     <TaskList
                       tasks={completedTasks}
                       onToggleComplete={toggleTaskCompletion}
                       onDelete={deleteTask}
                       onUpdate={updateTask}
                     />
-                  </CardContent>
-                </Card>
-              </div>
-            )}
+                  ) : (
+                     <div className="text-center p-16 text-muted-foreground">
+                      <p className="text-lg font-medium">No completed tasks yet.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
         </div>
 
       </main>
